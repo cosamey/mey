@@ -1,0 +1,26 @@
+[fade-animation] {
+  opacity: 0;
+  will-change: opacity;
+}
+
+.line {
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 0, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 100%);
+  overflow: hidden;
+}
+
+.line-child {
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+.word {
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 0, 0 50%);
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 50%);
+  overflow: hidden;
+}
+
+.word-child {
+  transform: translateY(100%);
+  will-change: transform;
+}

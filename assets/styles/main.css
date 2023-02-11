@@ -1,0 +1,23 @@
+@import './animations.css';
+@import './cursor.css';
+@import './fonts/gilroy.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply font-gilroy antialiased selection:bg-primary selection:text-white;
+  }
+}
+
+@layer components {
+  .link {
+    @apply transition-opacity duration-300 ease-in-out hover:opacity-50;
+  }
+}
