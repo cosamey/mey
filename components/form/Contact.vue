@@ -2,11 +2,21 @@
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
 import { trackGoal } from 'fathom-client';
 
-const name = ref('');
-const email = ref('');
-const company = ref('');
-const budget = ref('');
-const message = ref('');
+const mail = useMail();
+
+const initialFormState = {
+  name: '',
+  email: '',
+  company: '',
+  budget: '',
+  message: '',
+};
+
+const state = reactive({
+  form: initialFormState,
+  isSent: false,
+  error: '',
+});
 
 const options = [
   { key: 'less then 5K', label: '&lt; 5K' },
@@ -16,51 +26,48 @@ const options = [
   { key: 'more then 50K', label: '&gt; 50K' },
 ];
 
-const mail = useMail();
-const sent = ref(false);
-const error = ref('');
-
-function send() {
-  mail
-    .send({
+async function send() {
+  try {
+    await mail.send({
       from: {
-        name: name.value,
-        address: email.value,
+        name: state.form.name,
+        address: state.form.email,
       },
-      replyTo: email.value,
+      replyTo: state.form.email,
       subject: 'Message from website',
-      text: `Name: ${budget.value}\nCompany: ${company.value}\nBudget: ${budget.value}\n\n${message.value}`,
-    })
-    .then(() => {
-      sent.value = true;
-    })
-    .catch((e) => {
-      error.value = e.message;
-      console.error('Something went wrong: ' + e.message);
+      text: `Name: ${state.form.name}\nCompany: ${state.form.company}\nBudget: ${state.form.budget}\n\n${state.form.message}`,
     });
 
-  name.value = '';
-  email.value = '';
-  company.value = '';
-  budget.value = '';
-  message.value = '';
+    state.isSent = true;
+    state.form = { initialFormState };
 
-  trackGoal('V2KWLOPR', 0);
+    trackGoal('V2KWLOPR', 0);
+  } catch (e) {
+    state.error = e.message;
+    console.error('Something went wrong: ' + e.message);
+  }
 }
 </script>
 
 <template>
   <form @submit.prevent="send" class="flex flex-col gap-[5vw] sm:gap-[2.5vw]">
     <InputGroup id="name" label="Name">
-      <Input v-model="name" id="name" name="name" autocomplete="name" required />
+      <Input v-model="state.form.name" id="name" name="name" autocomplete="name" required />
     </InputGroup>
     <InputGroup id="email" label="Email">
-      <Input v-model="email" type="email" id="email" name="email" autocomplete="email" required />
+      <Input
+        v-model="state.form.email"
+        type="email"
+        id="email"
+        name="email"
+        autocomplete="email"
+        required
+      />
     </InputGroup>
     <InputGroup id="company" label="Company" optional>
-      <Input v-model="company" id="company" name="company" autocomplete="organization" />
+      <Input v-model="state.form.company" id="company" name="company" autocomplete="organization" />
     </InputGroup>
-    <RadioGroup v-model="budget" name="budget">
+    <RadioGroup v-model="state.form.budget" name="budget">
       <RadioGroupLabel class="text-[5vw] sm:text-[3vw] lg:text-[1.5vw]">
         Budget
         <span class="opacity-50">(EUR)</span>
@@ -74,7 +81,7 @@ function send() {
           v-slot="{ checked }"
         >
           <div
-            class="inline-flex cursor-pointer items-center justify-center rounded-full border-2 px-[4vw] py-[2vw] transition-colors duration-300 focus:outline-none sm:px-[2vw] sm:py-[1vw]"
+            class="inline-flex cursor-pointer items-center justify-center rounded-full border-2 px-[4vw] py-[2vw] transition-all duration-300 hover:scale-105 focus:scale-105 focus:outline-none sm:px-[2vw] sm:py-[1vw]"
             :class="{
               'border-primary bg-primary': checked,
               'border-white bg-transparent': !checked,
@@ -89,14 +96,14 @@ function send() {
       </div>
     </RadioGroup>
     <InputGroup id="message" label="Tell us more">
-      <Textarea v-model="message" id="message" name="message" required />
+      <Textarea v-model="state.form.message" id="message" name="message" required />
     </InputGroup>
     <div
       class="mt-[2vw] flex flex-col items-center justify-between gap-[5vw] sm:mt-[1vw] sm:flex-row sm:items-start sm:gap-[3vw] lg:mt-[.5vw]"
     >
       <div>
-        <p v-if="sent" class="text-green-500">Form submitted successfully!</p>
-        <p v-if="error" class="text-red-500">There was an error sending the form.</p>
+        <p v-if="state.isSent" class="text-green-500">Form submitted successfully!</p>
+        <p v-if="state.error" class="text-red-500">There was an error sending the form.</p>
       </div>
       <button
         type="submit"
