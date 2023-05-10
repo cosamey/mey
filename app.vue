@@ -16,7 +16,7 @@ useServerSeoMeta({
 
 onMounted(() => {
   load('VHHRCACC', {
-    url: 'https://ideal-novel.cosamey.com/script.js',
+    url: 'https://cdn.usefathom.com/script.js',
     spa: 'auto',
   });
 });
