@@ -101,11 +101,11 @@ onMounted(() => {
                 Visit us
               </h2>
               <NuxtLink
-                href="https://goo.gl/maps/zkbVpV2nQUq1MzAK9"
+                href="https://goo.gl/maps/myRrzdtMGCbdQi4R6"
                 target="_blank"
                 class="mt-[.75vw] block w-fit text-[5vw] leading-tight tracking-wide transition-opacity duration-300 ease-in-out hover:opacity-50 sm:text-[3vw] lg:text-[1.5vw]"
               >
-                Coburgova 82C
+                Halenárska 10
                 <br />
                 917 01 Trnava
                 <br />

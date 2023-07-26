@@ -5,7 +5,7 @@
         <div class="flex items-end gap-10 uppercase leading-normal sm:gap-20">
           <SocialLinks class="[&_a]:link" />
           <ul>
-            <li>Coburgova 82C</li>
+            <li>Halenárska 10</li>
             <li>917 01 Trnava</li>
             <li>Slovakia</li>
           </ul>
